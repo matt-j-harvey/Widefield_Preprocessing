@@ -6,7 +6,6 @@ from scipy import signal, ndimage, stats
 from sklearn.linear_model import LinearRegression
 from skimage.morphology import white_tophat
 from PIL import Image
-from time import clock
 import os
 import cv2
 print("cv2 version", cv2.__version__)
