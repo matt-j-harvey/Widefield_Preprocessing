@@ -15,7 +15,7 @@ from datetime import datetime
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-
+from time import sleep
 import sys
 
 
@@ -40,8 +40,10 @@ def check_max_projection(home_directory):
 
     plt.imshow(max_projection)
     plt.show()
+    sleep(5)
+    plt.close()
 
     np.save(home_directory + "/max_projection", max_projection)
 
 
-check_max_projection("/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NRXN78.1A/2020_12_09_Switching_Imaging")
+check_max_projection("//media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NRXN71.2A/2020_12_17_Switching_Imaging/")
