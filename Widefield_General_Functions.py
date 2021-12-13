@@ -306,6 +306,7 @@ def get_selected_widefield_frames(onsets, start_window, stop_window):
 
     return selected_fames
 
+
 def get_selected_widefield_data(selected_widefield_onsets, widefield_data):
 
     selected_widefield_data = []

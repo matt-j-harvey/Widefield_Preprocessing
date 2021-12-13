@@ -67,6 +67,19 @@ def load_mask(home_directory):
 
     return indicies, image_height, image_width
 
+def get_selected_pixels(selected_regions, pixel_assignments):
+
+    selected_pixels = []
+    for region in selected_regions:
+        region_mask = np.where(pixel_assignments == region, 1, 0)
+        region_indicies = np.nonzero(region_mask)[0]
+        for index in region_indicies:
+            selected_pixels.append(index)
+    selected_pixels.sort()
+
+    return selected_pixels
+
+
 
 def assign_pixels(base_directory):
 
@@ -104,20 +117,67 @@ def assign_pixels(base_directory):
     bounding_array[y_start + atlas_y_shift: y_start + atlas_y_shift + atlas_height,x_start + atlas_x_shift: x_start + atlas_x_shift + atlas_width] = atlas_region_mapping
     bounded_atlas = bounding_array[y_start:y_start + image_height, x_start:x_start + image_width]
 
-    # Mask Atlas
+    # Get Pixel Region Assignments
     bounded_atlas = np.ndarray.flatten(bounded_atlas)
-    masked_atlas = np.zeros((image_height * image_width))
     pixel_region_assigments = []
     for pixel_index in indicies:
-        masked_atlas[pixel_index] = bounded_atlas[pixel_index]
         pixel_region_assigments.append(bounded_atlas[pixel_index])
-    masked_atlas = np.ndarray.reshape(masked_atlas, (image_height, image_width))
 
+    # Threshold Pixel Region Assignments
+    pixel_region_assigments_ints = np.around(pixel_region_assigments, 0)
+    pixel_region_assigments_thresholded = np.where(pixel_region_assigments == pixel_region_assigments_ints, pixel_region_assigments_ints, 0)
+    pixel_region_assigments = np.ndarray.astype(pixel_region_assigments_thresholded, np.int)
+
+    # Create Masked Atlas
+    masked_atlas = np.zeros((image_height * image_width))
+    number_of_pixels = len(indicies)
+    print("Number of pixels", number_of_pixels)
+
+    for pixel_index in range(number_of_pixels):
+        pixel_position = indicies[pixel_index]
+        region_assignment = pixel_region_assigments[pixel_index]
+        masked_atlas[pixel_position] = region_assignment
+    masked_atlas = np.ndarray.reshape(masked_atlas, (image_height, image_width))
+    #plt.imshow(masked_atlas)
+    #plt.show()
+
+    region_list = list(pixel_region_assigments)
+    region_list = set(region_list)
+    region_list = list(region_list)
+    print(region_list)
+    """
+    print("Region Pixel Assignments", pixel_region_assigments)
+    for region in region_list:
+        selected_pixels = get_selected_pixels([region], pixel_region_assigments)
+        selected_pixels_original_space = indicies[selected_pixels]
+        blank_mask = np.zeros((image_height * image_width))
+        blank_mask[selected_pixels_original_space] = 1
+        blank_mask = np.ndarray.reshape(blank_mask, (image_height, image_width))
+        plt.title(region)
+        plt.imshow(blank_mask)
+        plt.show()
+    """
     # Save Mapping
     np.save(os.path.join(base_directory, "Pixel_Assignmnets.npy"), pixel_region_assigments)
-
+    np.save(os.path.join(base_directory, "Pixel_Assignmnets_Image.npy"), masked_atlas),
     plt.imshow(masked_atlas, cmap='jet')
     plt.savefig(os.path.join(base_directory, "Pixel_Region_Assignmnet.png"))
     plt.close()
 
 
+session_list = ["/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NXAK14.1A/2021_06_17_Transition_Imaging/",
+                "/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NXAK7.1B/2021_04_02_Transition_Imaging/",
+                "/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NXAK4.1B/2021_04_10_Transition_Imaging/",
+                "/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NRXN78.1A/2020_12_09_Switching_Imaging/",
+                "/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NRXN78.1D/2020_11_29_Switching_Imaging/",
+
+                "/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NXAK4.1A/2021_04_12_Transition_Imaging/",
+                "/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NXAK16.1B/2021_07_08_Transition_Imaging/",
+                "/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NXAK10.1A/2021_06_18_Transition_Imaging/",
+                "/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NXAK12.1F/2021_09_22_Transition_Imaging/",
+                "/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NRXN71.2A/2020_12_17_Switching_Imaging/"]
+
+
+
+for base_directory in session_list:
+    assign_pixels(base_directory)
