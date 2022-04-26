@@ -46,6 +46,7 @@ class session_matching_window(QWidget):
 
         self.variable_dictionary = self.create_variable_dictionary()
 
+        self.subsequent_function = None
 
         # Add Session Buttons
         self.select_template_session_button = QPushButton("Select Template Session")
@@ -120,6 +121,9 @@ class session_matching_window(QWidget):
         self.map_button = QPushButton("Set Alignment")
         self.map_button.clicked.connect(self.set_alignment)
 
+        self.finished_mapping_button = QPushButton("Finished Mapping")
+        self.finished_mapping_button.clicked.connect(self.finished_mapping)
+
         # Add Labels
         self.x_label = QLabel()
         self.y_label = QLabel()
@@ -148,16 +152,21 @@ class session_matching_window(QWidget):
         self.layout.addWidget(self.width_label,                     15, 0,  1,  1)
         self.layout.addWidget(self.angle_label,                     16, 0,  1,  1)
         self.layout.addWidget(self.map_button,                      17, 0,  1,  1)
+        self.layout.addWidget(self.finished_mapping_button,         18, 0, 1,   1)
 
         # Add Display Widgets
-        self.layout.addWidget(self.skeleton_display_view_widget,    0, 1, 9, 1)
-        self.layout.addWidget(self.anatomy_display_view_widget,     0, 2, 9, 1)
-        self.layout.addWidget(self.functional_display_view_widget,  9, 1, 9, 1)
-        self.layout.addWidget(self.masked_display_view_widget,      9, 2, 9, 1)
+        self.layout.addWidget(self.skeleton_display_view_widget,    0, 1, 10, 1)
+        self.layout.addWidget(self.anatomy_display_view_widget,     0, 2, 10, 1)
+        self.layout.addWidget(self.functional_display_view_widget,  10, 1, 9, 1)
+        self.layout.addWidget(self.masked_display_view_widget,      10, 2, 9, 1)
 
 
         self.show()
 
+
+    def finished_mapping(self):
+        self.hide()
+        self.subsequent_function()
 
     def create_variable_dictionary(self):
 

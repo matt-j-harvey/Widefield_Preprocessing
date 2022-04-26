@@ -35,7 +35,8 @@ def check_led_colours(blue_array, violet_array):
     axes_1[1].imshow(violet_image)
     plt.show()
 
-
+"""
+Function No Longer Used Here - Delete Later ###
 def get_max_projection(array, home_directory):
 
     print("Getting Max Projection")
@@ -45,6 +46,7 @@ def get_max_projection(array, home_directory):
     max_projection = np.reshape(max_projection, (600, 608))
 
     np.save(home_directory + "/max_projection", max_projection)
+"""
 
 
 def get_blue_file(base_directory):
@@ -332,12 +334,12 @@ def perform_heamocorrection(home_directory):
 
     # Register Delta F
     print("Registering Delta F")
-    Register_Delta_F.register_delta_f(base_directory, delta_f_registered_file)
+    Register_Delta_F.register_delta_f(home_directory, delta_f_registered_file)
 
     # Create Sample Video
     print("Creating Sample Video")
     Create_Sample_Video.create_sample_video(delta_f_registered_file, home_directory, blur_size=2)
 
 
-base_directory = "/media/matthew/Seagate Expansion Drive/Widefield_Imaging/Transition_Analysis/NXAK4.1A/2021_04_12_Transition_Imaging"
-perform_heamocorrection(base_directory)
+#base_directory = "//media/matthew/29D46574463D2856/Transition_Data/NXAK14.1A/Selected_Sessions/2021_06_15"
+#perform_heamocorrection(base_directory)

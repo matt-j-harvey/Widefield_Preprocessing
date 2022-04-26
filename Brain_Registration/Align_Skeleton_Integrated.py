@@ -85,6 +85,7 @@ class skeleton_assignment_window(QWidget):
         self.coronal_start_coords = [0, 0]
         self.coronal_stop_coords  = [0, 0]
         self.finished_mapping = False
+        self.subsequent_function = None
 
         # Create Figures
         self.display_view_widget = QWidget()
@@ -148,8 +149,8 @@ class skeleton_assignment_window(QWidget):
         self.show()
 
     def finish_mapping(self):
-        self.finished_mapping = True
         self.hide()
+        self.subsequent_function()
 
     def get_midline_start_roi_coords(self):
             data2, xdata = self.midline_start_roi.getArrayRegion(self.max_projection, self.display_view.imageItem, returnMappedCoords=True)

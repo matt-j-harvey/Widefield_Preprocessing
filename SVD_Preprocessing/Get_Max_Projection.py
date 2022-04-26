@@ -26,7 +26,7 @@ def get_blue_file(base_directory):
         if "Blue" in file:
             return base_directory + "/" + file
 
-def check_max_projection(home_directory):
+def check_max_projection(home_directory, output_directory):
     print("Getting Max Projection")
 
     # Load Data
@@ -38,12 +38,11 @@ def check_max_projection(home_directory):
     max_projection = np.max(sample, axis=1)
     max_projection = np.reshape(max_projection, (600, 608))
 
+    np.save(os.path.join(output_directory, "max_projection"), max_projection)
+
+
+
     plt.imshow(max_projection)
-    plt.show()
-    sleep(5)
+    plt.show(block=False)
+    plt.pause(5)
     plt.close()
-
-    np.save(home_directory + "/max_projection", max_projection)
-
-
-check_max_projection("//media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NRXN71.2A/2020_12_17_Switching_Imaging/")

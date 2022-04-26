@@ -330,3 +330,52 @@ def create_image_from_data(data, indicies, image_height, image_width):
 
     return image
 
+
+
+def get_video_details(video_file):
+    cap = cv2.VideoCapture(video_file)
+    frameCount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    frameWidth = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    frameHeight = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    cap.release()
+
+    return frameCount, frameHeight, frameWidth
+
+def get_mousecam_files(base_directory):
+
+    # Get List Of All Files In Directory
+    file_list = os.listdir(base_directory)
+
+    cam_1_file = None
+    cam_2_file = None
+
+    # Iterate Through Files and See If They Contain The Phrase "Cam"
+    for file in file_list:
+        if "cam_1" in file:
+            cam_1_file = file
+        elif "cam_2" in file:
+            cam_2_file = file
+
+
+    # If We Are Unable To Find Either One - Return Error
+    if cam_1_file == None or cam_2_file == None:
+        print("Mousecam Files Not Found")
+        return None, None
+
+    else:
+
+        # Check Camera Details To Distinquish Between Eye and Body Cam
+        cam_1_details = get_video_details(os.path.join(base_directory, cam_1_file))
+        cam_2_details = get_video_details(os.path.join(base_directory, cam_2_file))
+
+        print("Cam 1 File: ", cam_1_file, "Frames:", cam_1_details[0], " Height:", cam_1_details[1], " Width:", cam_1_details[2])
+        print("Cam 2 File: ", cam_2_file, "Frames:", cam_2_details[0], " Height:", cam_2_details[1], " Width:", cam_2_details[2])
+
+        if cam_1_details[1] == 480:
+            bodycam = cam_1_file
+            eyecam = cam_2_file
+        else:
+            bodycam = cam_2_file
+            eyecam = cam_1_file
+
+        return bodycam, eyecam
