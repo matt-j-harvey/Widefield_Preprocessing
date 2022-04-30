@@ -6,6 +6,10 @@ import Get_Max_Projection
 import Motion_Correction_Adapted
 import Heamocorrection_V2
 import Perform_SVD_Compression_Incremental
+import Get_Baseline_Frames
+
+import matplotlib.pyplot as plt
+import numpy as np
 
 """
 1.) Get Max Projection
@@ -14,6 +18,9 @@ import Perform_SVD_Compression_Incremental
 4.) Heamocorrection
 5.) SVD
 """
+
+
+
 
 def get_output_directory(base_directory, output_stem):
 
@@ -35,29 +42,7 @@ def get_output_directory(base_directory, output_stem):
 
 output_stem = "/media/matthew/Expansion/Widefield_Analysis"
 
-
-# Not Yet Deleted Delta F
-
-# "/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NXAK24.1C/2021_11_05_Transition_Imaging",
-# "/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NXAK4.1A/2021_04_08_Transition_Imaging",
-
-
-# To Add
-
-
-
-
-
-
-# Duplicates
-#/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Switching_Analysis/Selected_sessions/NRXN71.2A/2020_12_15_Switching_Imaging
-
-# Errors
-#"/media/matthew/Seagate Expansion Drive/Switching_Analysis/Homs/NRXN71.2A/2020_12_15_Switching_Imaging",
-
-
-
-session_list = [
+"""
 "/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NXAK14.1A/2021_06_13_Transition_Imaging",
 "/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NXAK14.1A/2021_06_15_Transition_Imaging",
 "/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NXAK14.1A/2021_06_17_Transition_Imaging",
@@ -87,26 +72,71 @@ session_list = [
 "/media/matthew/Seagate Expansion Drive/Switching_Analysis/Homs/NXAK24.1C/2021_10_14_Switching_Imaging",
 "/media/matthew/Seagate Expansion Drive/Switching_Analysis/Homs/NXAK24.1C/2021_11_10_Transition_Imaging",
 
+"/media/matthew/Seagate Expansion Drive1/Learning_Analysis/NRXN78.1D/2020_11_14_Discrimination_Imaging",
+
+"/media/matthew/Seagate Expansion Drive1/Learning_Analysis/NRXN78.1D/2020_11_15_Discrimination_Imaging",
+"/media/matthew/Seagate Expansion Drive1/Learning_Analysis/NRXN78.1D/2020_11_16_Discrimination_Imaging",
+"/media/matthew/Seagate Expansion Drive1/Learning_Analysis/NRXN78.1D/2020_11_17_Discrimination_Imaging",
+"/media/matthew/Seagate Expansion Drive1/Learning_Analysis/NRXN78.1D/2020_11_19_Discrimination_Imaging",
+"/media/matthew/Seagate Expansion Drive1/Learning_Analysis/NRXN78.1D/2020_11_21_Discrimination_Imaging",
+"/media/matthew/Seagate Expansion Drive1/Learning_Analysis/NRXN78.1D/2020_11_23_Discrimination_Imaging",
+"/media/matthew/Seagate Expansion Drive1/Learning_Analysis/NRXN78.1D/2020_11_25_Discrimination_Imaging",
+
+"/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NXAK24.1C/2021_11_05_Transition_Imaging",
+
+"/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NXAK4.1A/2021_04_08_Transition_Imaging"
+"""
+# Not Yet Deleted Delta F
+
+
+
+# To Add
+"""
+"""
+
+
+# Duplicates
+#/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Switching_Analysis/Selected_sessions/NRXN71.2A/2020_12_15_Switching_Imaging
+
+# Errors
+#"/media/matthew/Seagate Expansion Drive/Switching_Analysis/Homs/NRXN71.2A/2020_12_15_Switching_Imaging",
+
+
+
+session_list = [
+"/media/matthew/Seagate Expansion Drive1/Learning_Analysis/NXAK20.1B/2021_09_28_Discrimination_Imaging",
+"/media/matthew/Seagate Expansion Drive1/Learning_Analysis/NXAK20.1B/2021_09_30_Discrimination_Imaging",
+"/media/matthew/Seagate Expansion Drive1/Learning_Analysis/NXAK20.1B/2021_10_02_Discrimination_Imaging",
+"/media/matthew/Seagate Expansion Drive1/Learning_Analysis/NXAK20.1B/2021_10_04_Discrimination_Imaging",
+"/media/matthew/Seagate Expansion Drive1/Learning_Analysis/NXAK20.1B/2021_10_06_Discrimination_Imaging",
+"/media/matthew/Seagate Expansion Drive1/Learning_Analysis/NXAK20.1B/2021_10_09_Discrimination_Imaging",
+"/media/matthew/Seagate Expansion Drive1/Learning_Analysis/NXAK20.1B/2021_10_11_Discrimination_Imaging",
+"/media/matthew/Seagate Expansion Drive1/Learning_Analysis/NXAK20.1B/2021_10_13_Discrimination_Imaging",
+"/media/matthew/Seagate Expansion Drive1/Learning_Analysis/NXAK20.1B/2021_10_15_Discrimination_Imaging",
+"/media/matthew/Seagate Expansion Drive1/Learning_Analysis/NXAK20.1B/2021_10_17_Discrimination_Imaging",
+"/media/matthew/Seagate Expansion Drive1/Learning_Analysis/NXAK20.1B/2021_10_19_Discrimination_Imaging",
 ]
+
+number_of_sessions = len(session_list)
 
 
 # Check Output Directories
 output_directory_list = []
 for base_directory in session_list:
-
     output_directory = get_output_directory(base_directory, output_stem)
     output_directory_list.append(output_directory)
 
 """
 # Get Max Projections
-for base_directory in session_list:
-
-    print("output directory", output_directory)
+for session_index in range(number_of_sessions):
+    base_directory = session_list[session_index]
+    output_directory = output_directory_list[session_index]
     Get_Max_Projection.check_max_projection(base_directory, output_directory)
-"""
+
 
 # Assign Masks
-#Position_Mask.position_mask(session_list, output_directory_list)
+Position_Mask.position_mask(session_list, output_directory_list)
+"""
 
 # Process Data
 number_of_sessions = len(session_list)
@@ -117,11 +147,12 @@ for session_index in range(number_of_sessions):
 
     # Perform Motion Correction
     print("Performing Motion Correction", datetime.now())
-    Motion_Correction_Adapted.perform_motion_correction(base_directory, output_directory)
+    #Motion_Correction_Adapted.perform_motion_correction(base_directory, output_directory)
     
     # Perform Heamocorrection
-    #print("Performing Heamocorrection", datetime.now())
-    #Heamocorrection_V2.perform_heamocorrection(output_directory)
+    print("Performing Heamocorrection", datetime.now())
+    Get_Baseline_Frames.get_baseline_frames(base_directory, output_directory)
+    Heamocorrection_V2.perform_heamocorrection(output_directory)
     
     # Perform SVD Compression
     #print("Performing SVD Compression", datetime.now())

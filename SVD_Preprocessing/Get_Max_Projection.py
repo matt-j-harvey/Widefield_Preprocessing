@@ -38,7 +38,9 @@ def check_max_projection(home_directory, output_directory):
     max_projection = np.max(sample, axis=1)
     max_projection = np.reshape(max_projection, (600, 608))
 
-    np.save(os.path.join(output_directory, "max_projection"), max_projection)
+    save_location = os.path.join(output_directory, "max_projection.npy")
+    print("MAsk save location: ", save_location)
+    np.save(save_location, max_projection)
 
 
 

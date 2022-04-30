@@ -321,6 +321,32 @@ def perform_motion_correction(base_directory, output_directory, output_file="Mot
     np.save(os.path.join(output_directory, "R_Shifts.npy"), r_shifts)
 
 
+
+def plot_registration_shifts(base_directory):
+    print("Plotting registration", base_directory)
+
+    # Load Data
+    x_shifts = np.load(os.path.join(base_directory, "X_Shifts.npy"))
+    y_shifts = np.load(os.path.join(base_directory, "Y_Shifts.npy"))
+    r_shifts = np.load(os.path.join(base_directory, "R_Shifts.npy"))
+
+    # Create Figure
+    figure_1 = plt.figure()
+    rows = 2
+    columns = 1
+    translation_axis = figure_1.add_subplot(rows, columns, 1)
+    rotation_axis = figure_1.add_subplot(rows, columns, 2)
+
+    # Plot Data
+    translation_axis.plot(x_shifts, c='b')
+    translation_axis.plot(y_shifts, c='r')
+    rotation_axis.plot(r_shifts, c='g')
+
+    # Save Figure
+    plt.savefig(os.path.join(base_directory, "Motion_Correction_Shifts.png"))
+    plt.close()
+
+
 def perform_motion_correction(base_directory, output_directory, output_file="Motion_Corrected_Mask_Data.hdf5"):
 
     # Get Blue and Violet Files
@@ -351,6 +377,7 @@ def perform_motion_correction(base_directory, output_directory, output_file="Mot
     r_shifts = []
 
     # Process Data
+    #file_cache_size = 16561440000
     with h5py.File(os.path.join(output_directory, output_file), "w") as f:
         corrected_blue_dataset = f.create_dataset("Blue_Data", (number_of_active_pixels, number_of_frames), dtype=np.uint16, chunks=True, compression="gzip")
         corrected_violet_dataset = f.create_dataset("Violet_Data", (number_of_active_pixels, number_of_frames), dtype=np.uint16, chunks=True, compression="gzip")
@@ -399,3 +426,6 @@ def perform_motion_correction(base_directory, output_directory, output_file="Mot
     np.save(os.path.join(output_directory, "X_Shifts.npy"), x_shifts)
     np.save(os.path.join(output_directory, "Y_Shifts.npy"), y_shifts)
     np.save(os.path.join(output_directory, "R_Shifts.npy"), r_shifts)
+
+    # Plot Registration Shifts
+    plot_registration_shifts(output_directory)

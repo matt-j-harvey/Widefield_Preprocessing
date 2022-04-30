@@ -6,6 +6,18 @@ import os
 import cv2
 from datetime import datetime
 from matplotlib.colors import LinearSegmentedColormap
+from sklearn.decomposition import PCA
+
+
+def get_session_name(base_directory):
+
+    # Split File Path By Forward Slash
+    split_base_directory = base_directory.split("/")
+
+    # Take The Last Two and Join By Underscore
+    session_name = split_base_directory[-2] + "_" + split_base_directory[-1]
+
+    return session_name
 
 
 
@@ -199,11 +211,16 @@ def create_sample_video(processed_file_location, home_directory, blur_size=1):
     sample_data = processed_data[1000:1000 + sample_size]
     sample_data = np.nan_to_num(sample_data)
 
+    # Denoise with dimensionality reduction
+    model = PCA(n_components=150)
+    transformed_data = model.fit_transform(sample_data)
+    sample_data = model.inverse_transform(transformed_data)
+
     # Get Colour Boundaries
     cm = plt.cm.ScalarMappable(norm=None, cmap='inferno')
 
-    colour_max = 0.8
-    colour_min = 0.2
+    colour_max = 0.7
+    colour_min = 0.1
 
     cm.set_clim(vmin=colour_min, vmax=colour_max)
 
@@ -216,7 +233,7 @@ def create_sample_video(processed_file_location, home_directory, blur_size=1):
     video = cv2.VideoWriter(video_name, video_codec, frameSize=(frame_width, frame_height), fps=30)  # 0, 12
 
     # plt.ion()
-    window_size = 2
+    window_size = 3
 
     for frame in range(sample_size - window_size):  # number_of_files:
         template = np.zeros((frame_height * frame_width))
@@ -353,12 +370,16 @@ def process_pixels(base_directory, delta_f_file):
     blue_matrix = data_container["Blue_Data"]
     violet_matrix = data_container["Violet_Data"]
 
+    # Load Baseline Frame Indexes
+    violet_baseline_frames = np.load(os.path.join(base_directory, "Violet_Baseline_Frames.npy"))
+    blue_baseline_frames = np.load(os.path.join(base_directory, "Blue_baseline_frames.npy"))
+
     # Get Data Structure
     number_of_images = np.shape(blue_matrix)[1]
     number_of_pixels = np.shape(blue_matrix)[0]
 
     # Define Chunking Settings
-    preferred_chunk_size = 10000
+    preferred_chunk_size = 20000
     number_of_chunks, chunk_sizes, chunk_starts, chunk_stops = get_chunk_structure(preferred_chunk_size, number_of_pixels)
 
     with h5py.File(delta_f_file, "w") as f:
@@ -372,10 +393,14 @@ def process_pixels(base_directory, delta_f_file):
             chunk_stop = int(chunk_stops[chunk_index])
             blue_data = blue_matrix[chunk_start:chunk_stop]
             violet_data = violet_matrix[chunk_start:chunk_stop]
+            print("loaded data", datetime.now())
 
             # Perform Delta F
-            blue_baseline = np.percentile(blue_data, axis=1, q=5)
-            violet_baseline = np.percentile(violet_data, axis=1, q=5)
+            blue_baseline_data = blue_data[:, blue_baseline_frames]
+            violet_baseline_data = violet_data[:, violet_baseline_frames]
+
+            blue_baseline = np.percentile(blue_baseline_data, axis=1, q=5)
+            violet_baseline = np.percentile(violet_baseline_data, axis=1, q=5)
 
             #blue_baseline = np.mean(blue_data, axis=1)
             #violet_baseline = np.mean(violet_data, axis=1)
@@ -410,5 +435,3 @@ def perform_heamocorrection(base_directory):
 
     # Create Sample Video
     create_sample_video(delta_f_file, base_directory, blur_size=2)
-
-perform_heamocorrection("/home/matthew/Documents/Jade_Retinotopy/KGCA7.1M/2022_04_04_Retinotopic_Mapping_Left")
