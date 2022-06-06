@@ -188,11 +188,11 @@ class session_matching_window(QWidget):
         self.template_max_projection = max_projection
 
         # Load Retinotopy Contours
-        retinotopy_array = np.load(new_session_directory + "/Registered_Contour_Array.npy")
+        retinotopy_array = np.load(r"/home/matthew/Documents/Allen_Atlas_Templates/Atlas_Template_V2.npy")
         self.template_functional_image = retinotopy_array
 
         # Load Mask
-        mask = np.load(new_session_directory + "/mask.npy")
+        mask = np.load(new_session_directory + "/Generous_Mask_Array.npy")
         self.template_mask = mask
 
         # Get New Directory + Session Name
@@ -343,23 +343,3 @@ if __name__ == '__main__':
     window.show()
 
     app.exec_()
-
-r"/media/matthew/Expansion/Widefield_Analysis/NXAK4.1B/2021_04_02_Transition_Imaging",
-r"/media/matthew/Expansion/Widefield_Analysis/NXAK4.1B/2021_04_08_Transition_Imaging",
-r"/media/matthew/Expansion/Widefield_Analysis/NXAK4.1B/2021_04_10_Transition_Imaging",
-
-"/media/matthew/Expansion/Widefield_Analysis/NXAK7.1B/2021_03_23_Transition_Imaging",
-"/media/matthew/Expansion/Widefield_Analysis/NXAK7.1B/2021_03_31_Transition_Imaging",
-"/media/matthew/Expansion/Widefield_Analysis/NXAK7.1B/2021_04_02_Transition_Imaging",
-
-"/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NXAK14.1A/2021_06_13_Transition_Imaging",
-"/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NXAK14.1A/2021_06_15_Transition_Imaging",
-"/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NXAK14.1A/2021_06_17_Transition_Imaging",
-
-"/media/matthew/Seagate Expansion Drive/Widefield_Imaging/Switching_Analysis/Selected_sessions/NRXN78.1D/2020_11_29_Switching_Imaging",
-"/media/matthew/Seagate Expansion Drive/Widefield_Imaging/Switching_Analysis/Selected_sessions/NRXN78.1D/2020_12_07_Switching_Imaging",
-r"/media/matthew/Seagate Expansion Drive/Widefield_Imaging/Switching_Analysis/Selected_sessions/NRXN78.1D/2020_12_05_Switching_Imaging",
-
-#"/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NXAK22.1A/2021_10_29_Transition_Imaging",
-"/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NXAK22.1A/2021_11_03_Transition_Imaging",
-"/media/matthew/Seagate Expansion Drive2/Widefield_Imaging/Transition_Analysis/NXAK22.1A/2021_11_05_Transition_Imaging",
