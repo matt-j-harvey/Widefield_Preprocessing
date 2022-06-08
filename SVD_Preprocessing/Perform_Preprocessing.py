@@ -282,23 +282,7 @@ session_list = [
 ]
 
 """
-session_list = [
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_02_02_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_02_04_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_02_06_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_02_08_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_02_10_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_02_12_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_02_14_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_02_16_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_02_18_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_02_23_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_02_25_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_02_27_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_03_01_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_03_03_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_03_05_Discrimination_Imaging",
-]
+
 """
 
 session_list = [
@@ -315,26 +299,39 @@ session_list = [
 
 
 
+
+# Replace THe Motion Corrected As We Have Swapped Blue and Violet For All But Last Session
 session_list = [
-    "/media/matthew/Seagate Expansion Drive1/NXAK4.1B/2021_02_04_Discrimination_Imaging",
-    "/media/matthew/Seagate Expansion Drive1/NXAK4.1B/2021_02_06_Discrimination_Imaging",
-    "/media/matthew/Seagate Expansion Drive1/NXAK4.1B/2021_02_08_Discrimination_Imaging",
-    "/media/matthew/Seagate Expansion Drive1/NXAK4.1B/2021_02_10_Discrimination_Imaging",
-    "/media/matthew/Seagate Expansion Drive1/NXAK4.1B/2021_02_12_Discrimination_Imaging",
-    "/media/matthew/Seagate Expansion Drive1/NXAK4.1B/2021_02_14_Discrimination_Imaging",
-    "/media/matthew/Seagate Expansion Drive1/NXAK4.1B/2021_02_22_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_02_02_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_02_04_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_02_06_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_02_08_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_02_10_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_02_12_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_02_14_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_02_16_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_02_18_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_02_23_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_02_25_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_02_27_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_03_01_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_03_03_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_03_05_Discrimination_Imaging",
 ]
 
 output_stem = r"//media/matthew/Expansion/Widefield_Analysis"
+output_stem = r"/media/matthew/Seagate Expansion Drive1/Processed_Widefield_Data"
 number_of_sessions = len(session_list)
 
+
+
+""""
 # Check Output Directories
 output_directory_list = []
 for base_directory in session_list:
     output_directory = get_output_directory(base_directory, output_stem)
     output_directory_list.append(output_directory)
 
-"""
 for base_directory in session_list:
     check_led_colours(base_directory)
 
@@ -353,7 +350,8 @@ for session_index in range(number_of_sessions):
     print("Session ", session_index, " of ", number_of_sessions)
 
     base_directory = session_list[session_index]
-    output_directory = output_directory_list[session_index]
+    #output_directory = output_directory_list[session_index]
+    output_directory = base_directory
 
     # Perform Motion Correction
     #print("Performing Motion Correction", datetime.now())
@@ -365,5 +363,5 @@ for session_index in range(number_of_sessions):
     Heamocorrection_V2.perform_heamocorrection(base_directory, output_directory, use_baseline_frames=True, bandpass_filter=False)
 
     # Perform SVD Compression
-    #print("Performing SVD Compression", datetime.now())
-    #Blockwise_Approximate_SVD.perform_svd_compression(output_directory)
+    print("Performing SVD Compression", datetime.now())
+    Blockwise_Approximate_SVD.perform_svd_compression(output_directory)

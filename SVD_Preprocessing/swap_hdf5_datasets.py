@@ -189,23 +189,22 @@ app = QApplication(sys.argv)
 """
 
 session_list = [
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_02_02_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_02_04_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_02_06_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_02_08_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_02_10_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_02_12_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_02_14_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_02_16_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_02_18_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_02_23_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_02_25_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_02_27_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_03_01_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_03_03_Discrimination_Imaging",
-r"/media/matthew/Seagate Expansion Drive1/Longitudinal_Analysis/NXAK4.1A/2021_03_05_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_02_02_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_02_04_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_02_06_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_02_08_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_02_10_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_02_12_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_02_14_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_02_16_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_02_18_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_02_23_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_02_25_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_02_27_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_03_01_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_03_03_Discrimination_Imaging",
+r"/media/matthew/Seagate Expansion Drive1/NXAK4.1A/2021_03_05_Discrimination_Imaging",
 ]
-
 
 for session in session_list:
     get_image_samples(session)
