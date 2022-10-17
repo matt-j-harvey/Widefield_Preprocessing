@@ -25,6 +25,12 @@ def factor_number(number_to_factor):
 
     return factor_list
 
+def load_downsampled_mask(base_directory):
+    mask_dict = np.load(os.path.join(base_directory, "Downsampled_mask_dict.npy"), allow_pickle=True)[()]
+    indicies = mask_dict["indicies"]
+    image_height = mask_dict["image_height"]
+    image_width = mask_dict["image_width"]
+    return indicies, image_height, image_width
 
 def get_chunk_structure(chunk_size, array_size):
     number_of_chunks = int(np.ceil(array_size / chunk_size))
@@ -72,9 +78,11 @@ def get_best_grid(number_of_items):
 
     return factors[best_pair]
 
+
 def invert_dictionary(dictionary):
     inv_map = {v: k for k, v in dictionary.items()}
     return inv_map
+
 
 def take_closest(myList, myNumber):
 
@@ -145,9 +153,20 @@ def get_bodycam_filename(base_directory):
         if file_split[-1] == '1.mp4' and file_split[-2] == 'cam':
             return file
 
+def get_eyecam_filename(base_directory):
+
+    file_list = os.listdir(base_directory)
+
+    for file in file_list:
+        file_split = file.split('_')
+        if file_split[-1] == '2.mp4' and file_split[-2] == 'cam':
+            return file
+
+
 def check_directory(directory):
     if not os.path.exists(directory):
         os.mkdir(directory)
+
 
 def load_ai_recorder_file(ai_recorder_file_location):
     table = tables.open_file(ai_recorder_file_location, mode='r')
@@ -169,6 +188,7 @@ def load_ai_recorder_file(ai_recorder_file_location):
     data_matrix = np.clip(data_matrix, a_min=0, a_max=None)
     return data_matrix
 
+
 def load_generous_mask(home_directory):
 
     # Loads the mask for a video, returns a list of which pixels are included, as well as the original image height and width
@@ -185,6 +205,14 @@ def load_generous_mask(home_directory):
     indicies = np.ndarray.flatten(indicies)
 
     return indicies, image_height, image_width
+
+
+def get_background_pixels(indicies, image_height, image_width):
+    template = np.ones(image_height * image_width)
+    template[indicies] = 0
+    template = np.reshape(template, (image_height, image_width))
+    background_pixels = np.nonzero(template)
+    return background_pixels
 
 
 
@@ -440,6 +468,7 @@ def get_selected_widefield_data(selected_widefield_onsets, widefield_data):
     selected_widefield_data = np.array(selected_widefield_data)
     return selected_widefield_data
 
+
 def create_image_from_data(data, indicies, image_height, image_width):
     template = np.zeros((image_height, image_width))
     data = np.nan_to_num(data)
@@ -447,8 +476,6 @@ def create_image_from_data(data, indicies, image_height, image_width):
     image = np.ndarray.reshape(template, (image_height, image_width))
 
     return image
-
-
 
 def get_video_details(video_file):
     cap = cv2.VideoCapture(video_file)

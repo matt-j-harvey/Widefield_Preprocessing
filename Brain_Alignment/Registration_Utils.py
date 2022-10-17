@@ -20,6 +20,14 @@ def get_musall_cmap():
 
     return cmap
 
+
+def load_downsampled_mask(base_directory):
+    mask_dict = np.load(os.path.join(base_directory, "Downsampled_mask_dict.npy"), allow_pickle=True)[()]
+    indicies = mask_dict["indicies"]
+    image_height = mask_dict["image_height"]
+    image_width = mask_dict["image_width"]
+    return indicies, image_height, image_width
+
 # Load Generous Mask
 def load_generous_mask(base_directory):
 
