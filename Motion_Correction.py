@@ -13,6 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 import os
 import cv2
 
@@ -32,9 +33,7 @@ import matplotlib.pyplot as plt
 import h5py
 import sys
 
-sys.path.append("/home/matthew/Documents/Github_Code/Widefield_Preprocessing")
-
-import Widefield_General_Functions
+import Preprocessing_Utils
 
 cv2.setNumThreads(10)
 
@@ -294,7 +293,7 @@ def perform_motion_correction(base_directory, output_directory, output_file="Mot
     number_of_pixels, number_of_frames = np.shape(blue_data)
     number_of_active_pixels = len(indicies)
     preferred_chunk_size = 5000
-    number_of_chunks, chunk_sizes, chunk_starts, chunk_stops = Widefield_General_Functions.get_chunk_structure(preferred_chunk_size, number_of_frames)
+    number_of_chunks, chunk_sizes, chunk_starts, chunk_stops = Preprocessing_Utils.get_chunk_structure(preferred_chunk_size, number_of_frames)
 
     x_shifts = []
     y_shifts = []
