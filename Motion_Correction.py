@@ -352,3 +352,4 @@ def perform_motion_correction(base_directory, output_directory, output_file="Mot
 
     # Plot Registration Shifts
     plot_registration_shifts(output_directory)
+
