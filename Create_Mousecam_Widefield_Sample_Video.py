@@ -144,7 +144,6 @@ def get_mousecam_sample(base_directory, mousecam_filename, sample_start, sample_
 
     # Load Widefield Frame Dict
     widefield_frame_dict = np.load(os.path.join(base_directory, "Stimuli_Onsets", "widfield_to_mousecam_frame_dict.npy"), allow_pickle=True)[()]
-    print("Widefield Frame Dict", widefield_frame_dict)
 
     # Get Mousecam Frames
     mousecam_frames = []
@@ -180,6 +179,11 @@ def create_sample_video_with_mousecam(delta_f_directory, bodycam_directory, outp
     eyecam_sample = get_mousecam_sample(base_directory, eyecam_filename, sample_start, sample_end)
     print("Finished Getting Mousecam Sample", datetime.now())
 
+    # Get Running Sample
+    downsampled_ai_matrix = np.load(os.path.join(base_directory, "Downsampled_AI_Matrix_Framewise.npy"))
+    stimuli_dictionary = widefield_utils.create_stimuli_dictionary()
+    running_trace = downsampled_ai_matrix[stimuli_dictionary["Running"]]
+
     # Create Colourmaps
     widefield_colourmap = widefield_utils.get_musall_cmap()
     widefield_colourmap = plt.cm.ScalarMappable(norm=Normalize(vmin=-0.05, vmax=0.05), cmap=widefield_colourmap)
@@ -196,13 +200,15 @@ def create_sample_video_with_mousecam(delta_f_directory, bodycam_directory, outp
 
     figure_1 = plt.figure(figsize=(15, 5))
     canvas = FigureCanvasAgg(figure_1)
+    rows = 1
+    columns = 4
+
     for frame_index in tqdm(range(sample_length)):
 
-        rows = 1
-        columns = 3
         brain_axis = figure_1.add_subplot(rows, columns, 1)
         body_axis = figure_1.add_subplot(rows, columns, 2)
         eye_axis = figure_1.add_subplot(rows, columns, 3)
+        running_axis = figure_1.add_subplot(rows, columns, 4)
 
         # Extract Frames
         brain_frame = delta_f_sample[frame_index]
@@ -214,6 +220,20 @@ def create_sample_video_with_mousecam(delta_f_directory, bodycam_directory, outp
         body_frame = mousecam_colourmap.to_rgba(body_frame)
         eye_frame = mousecam_colourmap.to_rgba(eye_frame)
         #brain_frame[background_pixels] = (1,1,1,1)
+
+        # Get Running Sample
+        running_sample_window = 50
+        running_sample_start = frame_index + sample_start - running_sample_window
+        running_sample_stop = frame_index + sample_start + running_sample_window
+        running_sample_start = np.clip(running_sample_start, a_min=0, a_max=None)
+        running_sample = running_trace[running_sample_start:running_sample_stop]
+        running_x_values = list(range(-running_sample_window, running_sample_window))
+        running_x_values = np.multiply(running_x_values, 36)
+        running_axis.plot(running_x_values, running_sample)
+        running_axis.axvline(x=0, c='k', linestyle='dashed')
+        running_axis.set_ylim([0, 1.5])
+        running_axis.set_title("Running Speed")
+
 
         # Display Images
         brain_axis.imshow(brain_frame)
@@ -231,6 +251,7 @@ def create_sample_video_with_mousecam(delta_f_directory, bodycam_directory, outp
         canvas.draw()
         buf = canvas.buffer_rgba()
         image_from_plot = np.asarray(buf)
+        print(np.shape(image_from_plot))
         image_from_plot = cv2.cvtColor(image_from_plot, cv2.COLOR_RGB2BGR)
         video.write(image_from_plot)
 
@@ -245,4 +266,7 @@ delta_f_directory = r"//media/matthew/Expansion/Control_Data/NRXN78.1A/2020_11_0
 base_directory = r"//media/matthew/Expansion/Control_Data/NRXN78.1A/2020_11_02_Spontaneous"
 output_directory = r"//media/matthew/Expansion/Control_Data/NRXN78.1A/2020_11_02_Spontaneous"
 
-create_sample_video_with_mousecam(delta_f_directory, base_directory, output_directory)
+base_directory = r"/media/matthew/Expansion/Control_Data/NXAK7.1B/2021_01_25_Spontaneous"
+
+
+create_sample_video_with_mousecam(base_directory, base_directory, base_directory)
